@@ -1,15 +1,15 @@
-import { writeFileSync } from "fs"
+import { writeFileSync } from 'fs'
 
-function generateGaussian(mean: number ,std: number){
+function generateGaussian(mean: number, std: number) {
   // https://discourse.psychopy.org/t/javascript-gaussian-function/17724/2
-        var _2PI = Math.PI * 2;
-  var u1 = Math.random();
-  var u2 = Math.random();
-  
-  var z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(_2PI * u2);
-  var z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(_2PI * u2);
+  var _2PI = Math.PI * 2
+  var u1 = Math.random()
+  var u2 = Math.random()
 
-  return z0 * std + mean;
+  var z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(_2PI * u2)
+  var z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(_2PI * u2)
+
+  return z0 * std + mean
 }
 
 let sum = 0
@@ -23,8 +23,8 @@ for (var i = 0; i < 100; i++) {
   console.log(normalNumber)
 }
 
-console.log("\n")
+console.log('\n')
 console.log(sum / i)
-console.log("\n")
+console.log('\n')
 console.log(numbers)
-writeFileSync("NormalNumbers.txt", numbers)
+writeFileSync('NormalNumbers.txt', numbers)
