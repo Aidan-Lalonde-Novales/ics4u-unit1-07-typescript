@@ -42,33 +42,33 @@ function studentUnitArray(students: String[], units: String[]): void {
   const table = []
   table.push(units)
 
-  for (let count = 0; count < units.length; count++) {
+  for (let count = 0; count < students.length; count++) {
     const tempTable = []
     tempTable.push(students[count])
 
-    for (let count2 = 0; count2 < unitLength; count2++) {
+    for (let count2 = 0; count2 <= unitLength; count2++) {
       tempTable.push(Math.round(generateGaussian(75, 10)))
     }
     table.push(tempTable)
   }
   const formattedTable = table.join(',\n')
-  writeFileSync('marks.csv', formattedTable)
+  writeFileSync('marks1.csv', formattedTable)
 }
 
 // file path for students
-const studentFile = readFileSync('students.txt', 'utf-8')
+const studentFile = readFileSync('students1.txt', 'utf-8')
 const studentList = studentFile.split(/\r?\n/)
 studentList.pop()
 
 // file path for units
-const unitFile = readFileSync('units.txt', 'utf-8')
+const unitFile = readFileSync('units1.txt', 'utf-8')
 const unitList = unitFile.split(/\r?\n/)
 unitList.pop()
 
 // organization
 studentUnitArray(studentList, unitList)
 
-const csv = readFileSync('marks.csv', 'utf-8')
+const csv = readFileSync('marks1.csv', 'utf-8')
 console.log('')
 console.log(csv)
 
