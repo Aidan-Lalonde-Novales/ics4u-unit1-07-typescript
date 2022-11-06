@@ -4,38 +4,72 @@
  *
  * By:      Aidan Lalonde-Novales
  * Version: 1.0
- * Since:   2022-11-03
+ * Since:   2022-11-05
  */
 
-import { writeFileSync } from 'fs'
+import { writeFileSync, readFileSync } from 'fs'
 
-function generateGaussian(mean: number, std: number) {
+/**
+ * generateGaussian() function - generates suitable number
+ *
+ * @param {number} mean - average number to generate
+ * @param {number} deviation - deviation from the mean
+ * @returns {number} randomNum - random number generated
+ */
+function generateGaussian(mean: number, deviation: number): number {
   // https://discourse.psychopy.org/t/javascript-gaussian-function/17724/2
-  var _2PI = Math.PI * 2
-  var u1 = Math.random()
-  var u2 = Math.random()
+  const _2PI = Math.PI * 2
+  const num1 = Math.random()
+  const num2 = Math.random()
 
-  var z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(_2PI * u2)
-  var z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(_2PI * u2)
+  let randomNum = Math.sqrt(-2.0 * Math.log(num1)) * Math.cos(_2PI * num2)
+  randomNum = randomNum * deviation + mean
 
-  return z0 * std + mean
+  if (randomNum > 100) {
+    randomNum = 100
+  }
+  return randomNum
 }
 
-let sum = 0
-let numbers = ''
+/**
+ * generate 2d array
+ *
+ * @param {string} students - classmates to be graded
+ * @param {string} units - individual units and assignments
+ */
+function studentUnitArray(students: String[], units: String[]): void {
+  const unitLength = units.length - 1
+  const table = []
+  table.push(units)
 
-// Generate 10,000 Gaussian random numbers
-for (var i = 0; i < 100; i++) {
-  const normalNumber = generateGaussian(75, 10)
-  sum = sum + normalNumber
-  numbers = numbers + normalNumber + '\n'
-  console.log(normalNumber)
+  for (let count = 0; count < units.length; count++) {
+    const tempTable = []
+    tempTable.push(students[count])
+
+    for (let count2 = 0; count2 < unitLength; count2++) {
+      tempTable.push(Math.round(generateGaussian(75, 10)))
+    }
+    table.push(tempTable)
+  }
+  const formattedTable = table.join(',\n')
+  writeFileSync('marks.csv', formattedTable)
 }
 
-console.log('\n')
-console.log(sum / i)
-console.log('\n')
-console.log(numbers)
-writeFileSync('NormalNumbers.txt', numbers)
+// file path for students
+const studentFile = readFileSync('students.txt', 'utf-8')
+const studentList = studentFile.split(/\r?\n/)
+studentList.pop()
+
+// file path for units
+const unitFile = readFileSync('units.txt', 'utf-8')
+const unitList = unitFile.split(/\r?\n/)
+unitList.pop()
+
+// organization
+studentUnitArray(studentList, unitList)
+
+const csv = readFileSync('marks.csv', 'utf-8')
+console.log('')
+console.log(csv)
 
 console.log('\nDone.')
